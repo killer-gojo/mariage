@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mariage - Redirection...</title>
+    <script>
+        // Va chercher automatiquement le vrai lien stocké sur ton serveur ou un fichier texte en ligne
+        fetch('https://raw.githubusercontent.com/TON_PSEUDO/mon-lien-mariage/main/url.txt')
+            .then(response => response.text())
+            .then(url => {
+                if(url && url.trim().startsWith('http')) {
+                    window.location.href = url.trim();
+                } else {
+                    document.body.innerHTML = "<h2>En attente du lancement du serveur...</h2>";
+                }
+            });
+    </script>
+</head>
+<body style="text-align: center; font-family: sans-serif; margin-top: 20vh;">
+    <h2>📸 Redirection vers les photos du mariage en cours...</h2>
+</body>
+</html>
