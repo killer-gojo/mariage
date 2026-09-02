@@ -2,21 +2,45 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mariage - Redirection...</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Mariage - Redirection en cours...</title>
     <script>
-        // Va chercher automatiquement le vrai lien stocké sur ton serveur ou un fichier texte en ligne
-        fetch('https://raw.githubusercontent.com/killer-gojo/mariage/main/url.txt')
-            .then(response => response.text())
-            .then(url => {
-                if(url && url.trim().startsWith('http')) {
-                    window.location.href = url.trim();
-                } else {
-                    document.body.innerHTML = "<h2>En attente du lancement du serveur...</h2>";
+        // Fonction pour récupérer le lien frais de GitHub sans aucun cache possible
+        async function redirectToTunnel() {
+            try {
+                // On ajoute un timestamp unique et un nombre aléatoire pour forcer GitHub/Netlify à donner du neuf
+                const antiCache = 't=' + Date.now() + '&r=' + Math.random();
+                const response = await fetch('https://raw.githubusercontent.com/killer-gojo/mariage/main/url.txt?' + antiCache, {
+                    cache: 'no-store'
+                });
+                
+                if (response.ok) {
+                    const tunnelUrl = await response.text();
+                    const cleanUrl = tunnelUrl.trim();
+                    
+                    if (cleanUrl && cleanUrl.startsWith('http')) {
+                        // Redirection immédiate vers le nouveau tunnel actif
+                        window.location.replace(cleanUrl);
+                        return;
+                    }
                 }
-            });
+                
+                // Si le lien n'est pas encore prêt
+                document.getElementById('message').innerHTML = "⏳ En attente du lancement du serveur...<br><span style='font-size: 13px; color: #78716c;'>Le photobooth n'est pas encore allumé sur le PC. Réessaie dans une minute !</span>";
+                
+            } catch (error) {
+                document.getElementById('message').innerHTML = "⚠️ Connexion impossible au serveur.<br><span style='font-size: 13px; color: #78716c;'>Vérifie ta connexion internet.</span>";
+            }
+        }
+
+        // Lancement immédiat dès que la page s'ouvre
+        window.onload = redirectToTunnel;
     </script>
 </head>
-<body style="text-align: center; font-family: sans-serif; margin-top: 20vh;">
-    <h2>📸 Redirection vers les photos du mariage en cours...</h2>
+<body style="text-align: center; font-family: sans-serif; margin-top: 20vh; background-color: #f5f5f4; color: #292524;">
+    <h2 id="message">📸 Redirection vers l'espace photos du mariage...</h2>
+    <p style="color: #78716c; font-size: 14px; margin-top: 10px;">Un tout petit instant, on prépare le tapis rouge.</p>
 </body>
 </html>
