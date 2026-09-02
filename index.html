@@ -5,7 +5,7 @@
     <title>Mariage - Redirection...</title>
     <script>
         // Va chercher automatiquement le vrai lien stocké sur ton serveur ou un fichier texte en ligne
-        fetch('https://raw.githubusercontent.com/TON_PSEUDO/mon-lien-mariage/main/url.txt')
+        fetch('https://raw.githubusercontent.com/killer-gojo/mariage/main/url.txt')
             .then(response => response.text())
             .then(url => {
                 if(url && url.trim().startsWith('http')) {
